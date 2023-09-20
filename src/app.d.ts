@@ -7,6 +7,16 @@ declare global {
 		// interface PageData {}
 		// interface Platform {}
 	}
+
+	interface Game {
+		height: number;
+		width: number;
+		state: number[][];
+		horProbSize?: number;
+		horProb?: number[][];
+		verProbSize?: number;
+		verProb?: number[][];
+	}
 }
 
 export {};
