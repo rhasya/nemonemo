@@ -19,10 +19,7 @@
 		handleApplyClick();
 	});
 
-	function handleApplyClick() {
-		game.height = inputHeight;
-		game.width = inputWidth;
-
+	function initBoard() {
 		const state: number[][] = [];
 		for (let i = 0; i < game.height; i++) {
 			state.push([]);
@@ -31,6 +28,16 @@
 			}
 		}
 		game.state = [...state];
+	}
+
+	function handleApplyClick() {
+		game = {
+			height: inputHeight,
+			width: inputWidth,
+			state: [[]]
+		};
+
+		initBoard();
 	}
 
 	function handleSaveClick() {
@@ -51,7 +58,7 @@
 		game = { state: [[]], ...data };
 		inputWidth = data.width;
 		inputHeight = data.height;
-		handleApplyClick();
+		initBoard();
 	}
 </script>
 
