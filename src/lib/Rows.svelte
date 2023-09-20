@@ -35,7 +35,7 @@
 {#each { length: game.height } as _, r (r)}
 	<tr>
 		{#each { length: game.verProbSize ?? 0 } as _, c (c)}
-			<th class="box {hor(r)}"><div>{game.verProb?.[r]?.[c] ?? ''}</div></th>
+			<th class="box {hor(r)}"><div>{game.verProb?.[r]?.[c] || ''}</div></th>
 		{/each}
 		{#each { length: game.width } as _, c (c)}
 			<td class="box {hor(r)} {ver(c)} {state(r, c)}">

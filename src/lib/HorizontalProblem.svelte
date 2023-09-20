@@ -12,7 +12,9 @@
 			<td class="box null" />
 		{/each}
 		{#each { length: game.width } as _, i (i)}
-			<th class="box {ver(i)}"><div>{game.horProb?.[i]?.[j] ?? ''}</div></th>
+			<th class="box {ver(i)}">
+				<div>{game.horProb?.[i]?.[j] || ''}</div>
+			</th>
 		{/each}
 	</tr>
 {/each}

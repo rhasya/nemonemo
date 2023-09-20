@@ -12,11 +12,7 @@
 	let game: Game = {
 		height: 0,
 		width: 0,
-		state: [[]],
-		horProbSize: 1,
-		horProb: [[1], [2], [3], [4], [5], [6], [7], [8], [9], [10], [11], [12], [13], [14], [15]],
-		verProbSize: 1,
-		verProb: [[1], [2], [3], [4], [5], [6], [7], [8], [9], [10], [11], [12], [13], [14], [15]]
+		state: [[]]
 	};
 
 	onMount(() => {
@@ -26,30 +22,15 @@
 	function handleApplyClick() {
 		game.height = inputHeight;
 		game.width = inputWidth;
-		game.state = [];
+
+		const state: number[][] = [];
 		for (let i = 0; i < game.height; i++) {
-			game.state.push([]);
+			state.push([]);
 			for (let j = 0; j < game.width; j++) {
-				game.state[i].push(0);
+				state[i].push(0);
 			}
 		}
-	}
-
-	function handleBoxClick(e: MouseEvent, r: number, c: number) {
-		if (e.buttons === 1) {
-			// fill
-			if (game.state[r][c] === 0) {
-				game.state[r][c] = 1;
-			} else {
-				game.state[r][c] = 0;
-			}
-		} else if (e.buttons === 2) {
-			game.state[r][c] = 2;
-		}
-	}
-
-	function handleContextMenu(e: MouseEvent) {
-		e.preventDefault();
+		game.state = [...state];
 	}
 
 	function handleSaveClick() {
@@ -64,6 +45,14 @@
 			game = { ...JSON.parse(atob(saveString)) };
 		}
 	}
+
+	async function handleProb1Click() {
+		const { default: data } = await import('$lib/prob/Prob1.json');
+		game = { state: [[]], ...data };
+		inputWidth = data.width;
+		inputHeight = data.height;
+		handleApplyClick();
+	}
 </script>
 
 <main>
@@ -74,6 +63,10 @@
 		X
 		<input type="text" size="2" bind:value={inputWidth} />
 		<button on:click={handleApplyClick}>Apply</button>
+	</div>
+	<div class="mb-4">
+		<h4>PROBLEM</h4>
+		<button on:click={handleProb1Click}>1</button>
 	</div>
 	<div class="mb-4">
 		<h4>SAVE/LOAD</h4>
