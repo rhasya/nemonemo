@@ -53,8 +53,16 @@
 		}
 	}
 
-	async function handleProb1Click() {
-		const { default: data } = await import('$lib/prob/Prob1.json');
+	async function handleProb1Click(e: MouseEvent) {
+		const { default: data } = await import(`$lib/prob/Prob1.json`);
+		game = { state: [[]], ...data };
+		inputWidth = data.width;
+		inputHeight = data.height;
+		initBoard();
+	}
+
+	async function handleProb2Click(e: MouseEvent) {
+		const { default: data } = await import(`$lib/prob/Prob2.json`);
 		game = { state: [[]], ...data };
 		inputWidth = data.width;
 		inputHeight = data.height;
@@ -73,7 +81,8 @@
 	</div>
 	<div class="mb-4">
 		<h4>PROBLEM</h4>
-		<button on:click={handleProb1Click}>1</button>
+		<button on:click={handleProb1Click} data-filename="Prob1.json">1</button>
+		<button on:click={handleProb2Click} data-filename="Prob2.json">2</button>
 	</div>
 	<div class="mb-4">
 		<h4>SAVE/LOAD</h4>
