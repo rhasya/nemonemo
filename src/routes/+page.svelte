@@ -30,6 +30,29 @@
 		game.state = [...state];
 	}
 
+	function processData(data: {
+		width: number;
+		height: number;
+		verProbSize?: number;
+		verProb?: number[][];
+		horProbSize?: number;
+		horProb?: number[][];
+	}) {
+		if (data.verProbSize && data.verProb) {
+			for (let i = 0; i < data.height; i++) {
+				const appArr = Array(data.verProbSize - data.verProb[i].length).map((_) => 0);
+				data.verProb[i].splice(0, 0, ...appArr);
+			}
+		}
+
+		if (data.horProbSize && data.horProb) {
+			for (let i = 0; i < data.width; i++) {
+				const appArr = Array(data.horProbSize - data.horProb[i].length).map((_) => 0);
+				data.horProb[i].splice(0, 0, ...appArr);
+			}
+		}
+	}
+
 	function handleApplyClick() {
 		game = {
 			height: inputHeight,
@@ -55,6 +78,7 @@
 
 	async function handleProb1Click(e: MouseEvent) {
 		const { default: data } = await import(`$lib/prob/Prob1.json`);
+		processData(data);
 		game = { state: [[]], ...data };
 		inputWidth = data.width;
 		inputHeight = data.height;
@@ -63,6 +87,16 @@
 
 	async function handleProb2Click(e: MouseEvent) {
 		const { default: data } = await import(`$lib/prob/Prob2.json`);
+		processData(data);
+		game = { state: [[]], ...data };
+		inputWidth = data.width;
+		inputHeight = data.height;
+		initBoard();
+	}
+
+	async function handleProb3Click(e: MouseEvent) {
+		const { default: data } = await import(`$lib/prob/Prob3.json`);
+		processData(data);
 		game = { state: [[]], ...data };
 		inputWidth = data.width;
 		inputHeight = data.height;
@@ -81,8 +115,9 @@
 	</div>
 	<div class="mb-4">
 		<h4>PROBLEM</h4>
-		<button on:click={handleProb1Click} data-filename="Prob1.json">1</button>
-		<button on:click={handleProb2Click} data-filename="Prob2.json">2</button>
+		<button on:click={handleProb1Click}>1</button>
+		<button on:click={handleProb2Click}>2</button>
+		<button on:click={handleProb3Click}>3</button>
 	</div>
 	<div class="mb-4">
 		<h4>SAVE/LOAD</h4>
