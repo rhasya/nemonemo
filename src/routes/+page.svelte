@@ -8,6 +8,7 @@
 	let inputWidth = 15;
 	let showTextArea = false;
 	let textAreaMsg = '';
+	let showXMark = true;
 
 	let game: Game = {
 		height: 0,
@@ -95,7 +96,7 @@
 	}
 
 	async function handleProb3Click(e: MouseEvent) {
-		const { default: data } = await import(`$lib/prob/Prob3.json`);
+		const { default: data } = await import(`$lib/prob/Prob4.json`);
 		processData(data);
 		game = { state: [[]], ...data };
 		inputWidth = data.width;
@@ -106,20 +107,19 @@
 
 <main>
 	<h1>NEMONEMO</h1>
-	<div class="mb-4">
+	<div class="option-row">
 		<h4>SIZE</h4>
 		<input type="text" size="2" bind:value={inputHeight} />
 		X
 		<input type="text" size="2" bind:value={inputWidth} />
 		<button on:click={handleApplyClick}>Apply</button>
-	</div>
-	<div class="mb-4">
+		<div class="w-2" />
 		<h4>PROBLEM</h4>
 		<button on:click={handleProb1Click}>1</button>
 		<button on:click={handleProb2Click}>2</button>
-		<button on:click={handleProb3Click}>3</button>
+		<button on:click={handleProb3Click}>4</button>
 	</div>
-	<div class="mb-4">
+	<div class="option-row">
 		<h4>SAVE/LOAD</h4>
 		<button on:click={handleSaveClick}>SAVE</button>
 		<button on:click={handleLoadClick}>LOAD</button>
@@ -129,20 +129,25 @@
 				<button on:click={() => (showTextArea = false)}>OK</button>
 			</div>
 		{/if}
+		<h4>DISPLAY</h4>
+		<button on:click={() => (showXMark = !showXMark)}>{`${showXMark ? 'HIDE' : 'SHOW'} X`}</button>
 	</div>
 	<Board>
 		<!-- Horizontal Problem -->
 		<HorizontalProblem {game} />
-		<Rows bind:game />
+		<Rows bind:game {showXMark} />
 	</Board>
 </main>
 
 <style>
 	h4 {
-		display: inline-block;
-		margin: 0 1rem 0 0;
+		margin-top: 0;
+		margin-bottom: 0;
 	}
-	.mb-4 {
+	.option-row {
+		display: flex;
+		flex-direction: row;
+		gap: 4px;
 		margin-bottom: 1rem;
 	}
 </style>

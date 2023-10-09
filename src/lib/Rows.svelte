@@ -1,5 +1,6 @@
 <script lang="ts">
 	export let game: Game;
+	export let showXMark: boolean;
 
 	function ver(i: number) {
 		return i % 5 === 0 ? 'ver-line' : '';
@@ -47,7 +48,7 @@
 					role="button"
 					tabindex="-1"
 				>
-					{#if game.state[r]?.[c] === 2}
+					{#if game.state[r]?.[c] === 2 && showXMark}
 						<svg>
 							<polyline points="0,0 32,32" fill="none" stroke-width="2" stroke="#CCCCCC" />
 							<polyline points="0,32 32,0" fill="none" stroke-width="2" stroke="#CCCCCC" />
