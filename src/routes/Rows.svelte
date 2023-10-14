@@ -2,6 +2,8 @@
 	export let game: Game;
 	export let showXMark: boolean;
 
+	export let active: { r: number; c: number };
+
 	function ver(i: number) {
 		return i % 5 === 0 ? 'ver-line' : '';
 	}
@@ -31,18 +33,26 @@
 			}
 		}
 	}
+
+	function handlePointerover(r: number, c: number) {
+		active.r = r;
+		active.c = c;
+	}
 </script>
 
 {#each { length: game.height } as _, r (r)}
 	<tr>
 		{#each { length: game.verProbSize ?? 0 } as _, c (c)}
-			<th class="box {hor(r)}"><div>{game.verProb?.[r]?.[c] || ''}</div></th>
+			<th class="box {hor(r)}" class:active={active.r === r}
+				><div>{game.verProb?.[r]?.[c] || ''}</div></th
+			>
 		{/each}
 		{#each { length: game.width } as _, c (c)}
 			<td class="box {hor(r)} {ver(c)} {state(r, c)}">
 				<div
 					on:mousedown={handleMousedown}
 					on:contextmenu|preventDefault={() => {}}
+					on:pointerover={() => handlePointerover(r, c)}
 					data-row={r}
 					data-col={c}
 					role="button"
@@ -64,5 +74,8 @@
 	td svg {
 		width: 100%;
 		height: 100%;
+	}
+	.active {
+		background-color: aqua;
 	}
 </style>

@@ -6,4 +6,6 @@
 	<title>SVELTE NEMONEMO</title>
 </svelte:head>
 
-<slot />
+<main class="main">
+	<slot />
+</main>

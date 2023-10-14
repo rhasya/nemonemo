@@ -1,7 +1,6 @@
 <script lang="ts">
-	import Board from '$lib/Board.svelte';
-	import HorizontalProblem from '$lib/HorizontalProblem.svelte';
-	import Rows from '$lib/Rows.svelte';
+	import Board from './Board.svelte';
+	import { encodeJson, decodeJsonStr } from '$lib/jsonUtil';
 	import { onMount } from 'svelte';
 
 	let inputHeight = 15;
@@ -9,6 +8,9 @@
 	let showTextArea = false;
 	let textAreaMsg = '';
 	let showXMark = true;
+
+	let activeRow = -1;
+	let activeColumn = -1;
 
 	let game: Game = {
 		height: 0,
@@ -65,15 +67,14 @@
 	}
 
 	function handleSaveClick() {
-		textAreaMsg = btoa(JSON.stringify(game));
+		textAreaMsg = encodeJson(game);
 		localStorage.setItem('saveString', textAreaMsg);
-		// showTextArea = true;
 	}
 
 	function handleLoadClick() {
 		let saveString = localStorage.getItem('saveString');
 		if (saveString) {
-			game = { ...JSON.parse(atob(saveString)) };
+			game = { ...decodeJsonStr(saveString) };
 		}
 	}
 
@@ -96,7 +97,7 @@
 	}
 
 	async function handleProb3Click(e: MouseEvent) {
-		const { default: data } = await import(`$lib/prob/Prob4.json`);
+		const { default: data } = await import(`$lib/prob/Prob6.json`);
 		processData(data);
 		game = { state: [[]], ...data };
 		inputWidth = data.width;
@@ -105,39 +106,35 @@
 	}
 </script>
 
-<main>
-	<h1>NEMONEMO</h1>
-	<div class="option-row">
-		<h4>SIZE</h4>
-		<input type="text" size="2" bind:value={inputHeight} />
-		X
-		<input type="text" size="2" bind:value={inputWidth} />
-		<button on:click={handleApplyClick}>Apply</button>
-		<div class="w-2" />
-		<h4>PROBLEM</h4>
-		<button on:click={handleProb1Click}>1</button>
-		<button on:click={handleProb2Click}>2</button>
-		<button on:click={handleProb3Click}>4</button>
-	</div>
-	<div class="option-row">
-		<h4>SAVE/LOAD</h4>
-		<button on:click={handleSaveClick}>SAVE</button>
-		<button on:click={handleLoadClick}>LOAD</button>
-		{#if showTextArea}
-			<div class="popup">
-				<textarea bind:value={textAreaMsg} />
-				<button on:click={() => (showTextArea = false)}>OK</button>
-			</div>
-		{/if}
-		<h4>DISPLAY</h4>
-		<button on:click={() => (showXMark = !showXMark)}>{`${showXMark ? 'HIDE' : 'SHOW'} X`}</button>
-	</div>
-	<Board>
-		<!-- Horizontal Problem -->
-		<HorizontalProblem {game} />
-		<Rows bind:game {showXMark} />
-	</Board>
-</main>
+<h1>NEMONEMO</h1>
+<div class="option-row">
+	<h4>SIZE</h4>
+	<input type="text" size="2" bind:value={inputHeight} />
+	X
+	<input type="text" size="2" bind:value={inputWidth} />
+	<button on:click={handleApplyClick}>Apply</button>
+	<div class="w-2" />
+	<h4>PROBLEM</h4>
+	<button on:click={handleProb1Click}>1</button>
+	<button on:click={handleProb2Click}>2</button>
+	<button on:click={handleProb3Click}>5</button>
+</div>
+<div class="option-row">
+	<h4>SAVE/LOAD</h4>
+	<button on:click={handleSaveClick}>SAVE</button>
+	<button on:click={handleLoadClick}>LOAD</button>
+	{#if showTextArea}
+		<div class="popup">
+			<textarea bind:value={textAreaMsg} />
+			<button on:click={() => (showTextArea = false)}>OK</button>
+		</div>
+	{/if}
+	<h4>DISPLAY</h4>
+	<button on:click={() => (showXMark = !showXMark)}>{`${showXMark ? 'HIDE' : 'SHOW'} X`}</button>
+</div>
+<div>
+	<Board bind:game {showXMark} />
+</div>
 
 <style>
 	h4 {

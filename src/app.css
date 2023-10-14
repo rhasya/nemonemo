@@ -12,14 +12,14 @@ body {
   font-size: 16px;
 }
 
-div.box {
-  width: 2rem;
-  height: 2rem;
-  border: 1px solid black;
+.main { 
+  width: 1280px;
+  margin: auto;
 }
 
 table {
   border-collapse: collapse;
+  flex-grow: 0;
 }
 
 table td.box, table th.box {
