@@ -8,10 +8,6 @@
 	let showTextArea = false;
 	let textAreaMsg = '';
 	let showXMark = true;
-
-	let activeRow = -1;
-	let activeColumn = -1;
-
 	let game: Game = {
 		height: 0,
 		width: 0,
@@ -97,7 +93,7 @@
 	}
 
 	async function handleProb3Click(e: MouseEvent) {
-		const { default: data } = await import(`$lib/prob/Prob6.json`);
+		const { default: data } = await import(`$lib/prob/Prob7.json`);
 		processData(data);
 		game = { state: [[]], ...data };
 		inputWidth = data.width;
