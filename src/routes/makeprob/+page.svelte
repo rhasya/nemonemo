@@ -1,9 +1,12 @@
 <script lang="ts">
+	import { encodeJson } from '$lib/jsonUtil';
+
 	let width = 20;
 	let height = 20;
 	let horProbArr = Array<string>(20);
 	let verProbArr = Array<string>(20);
 	let text = '';
+	let encodedText = '';
 
 	function handleApplyClick() {
 		horProbArr = Array<string>(width);
@@ -25,6 +28,7 @@
 			verProb
 		};
 		text = JSON.stringify(j);
+		encodedText = encodeJson(j);
 	}
 </script>
 
@@ -68,6 +72,7 @@
 	</div>
 	<div>
 		<textarea bind:value={text} />
+		<textarea bind:value={encodedText} />
 	</div>
 </div>
 

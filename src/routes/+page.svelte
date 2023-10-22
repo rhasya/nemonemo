@@ -8,6 +8,7 @@
 	let showTextArea = false;
 	let textAreaMsg = '';
 	let showXMark = true;
+	let encodedProblem = '';
 	let game: Game = {
 		height: 0,
 		width: 0,
@@ -82,6 +83,16 @@
 		inputHeight = data.height;
 		initBoard();
 	}
+
+	function handleDPClick() {
+		const data = decodeJsonStr(encodedProblem);
+		processData(data);
+		game = { state: [[]], ...data };
+		inputWidth = data.width;
+		inputHeight = data.height;
+		initBoard();
+		encodedProblem = '';
+	}
 </script>
 
 <h1>NEMONEMO</h1>
@@ -92,10 +103,6 @@
 	<input type="number" min={1} max={99} maxlength={2} bind:value={inputWidth} />
 	<button on:click={handleApplyClick}>Apply</button>
 	<div class="w-2" />
-	<h4>PROBLEM</h4>
-	<button on:click={handleProb1Click}>P</button>
-</div>
-<div class="option-row">
 	<h4>SAVE/LOAD</h4>
 	<button on:click={handleSaveClick}>SAVE</button>
 	<button on:click={handleLoadClick}>LOAD</button>
@@ -107,6 +114,12 @@
 	{/if}
 	<h4>DISPLAY</h4>
 	<button on:click={() => (showXMark = !showXMark)}>{`${showXMark ? 'HIDE' : 'SHOW'} X`}</button>
+</div>
+<div class="option-row">
+	<h4>PROBLEM</h4>
+	<button on:click={handleProb1Click}>P</button>
+	<textarea bind:value={encodedProblem} />
+	<button on:click={handleDPClick}>Decode</button>
 </div>
 <div>
 	<Board bind:game {showXMark} />
