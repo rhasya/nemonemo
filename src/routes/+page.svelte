@@ -74,26 +74,8 @@
 		}
 	}
 
-	async function handleProb1Click(e: MouseEvent) {
-		const { default: data } = await import(`$lib/prob/Prob1.json`);
-		processData(data);
-		game = { state: [[]], ...data };
-		inputWidth = data.width;
-		inputHeight = data.height;
-		initBoard();
-	}
-
-	async function handleProb2Click(e: MouseEvent) {
-		const { default: data } = await import(`$lib/prob/Prob2.json`);
-		processData(data);
-		game = { state: [[]], ...data };
-		inputWidth = data.width;
-		inputHeight = data.height;
-		initBoard();
-	}
-
-	async function handleProb3Click(e: MouseEvent) {
-		const { default: data } = await import(`$lib/prob/Prob7.json`);
+	async function handleProb1Click() {
+		const { default: data } = await import(`$lib/prob/Prob8.json`);
 		processData(data);
 		game = { state: [[]], ...data };
 		inputWidth = data.width;
@@ -105,15 +87,13 @@
 <h1>NEMONEMO</h1>
 <div class="option-row">
 	<h4>SIZE</h4>
-	<input type="text" size="2" bind:value={inputHeight} />
+	<input type="number" min={1} max={99} maxlength={2} bind:value={inputHeight} />
 	X
-	<input type="text" size="2" bind:value={inputWidth} />
+	<input type="number" min={1} max={99} maxlength={2} bind:value={inputWidth} />
 	<button on:click={handleApplyClick}>Apply</button>
 	<div class="w-2" />
 	<h4>PROBLEM</h4>
-	<button on:click={handleProb1Click}>1</button>
-	<button on:click={handleProb2Click}>2</button>
-	<button on:click={handleProb3Click}>5</button>
+	<button on:click={handleProb1Click}>P</button>
 </div>
 <div class="option-row">
 	<h4>SAVE/LOAD</h4>
