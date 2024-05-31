@@ -8,14 +8,13 @@ declare global {
 		// interface Platform {}
 	}
 
-	interface Game {
-		height: number;
-		width: number;
-		state: number[][];
-		horProbSize?: number;
-		horProb?: number[][];
-		verProbSize?: number;
-		verProb?: number[][];
+	interface Problem {
+		id: string;
+		key: string;
+		title: string;
+		sizeVer: number;
+		sizeHor: number;
+		difficulty: number;
 	}
 }
 
