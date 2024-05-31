@@ -21,6 +21,17 @@
 		}
 	}
 
+	function handleRightClick(row_idx: number, col_idx: number, e: MouseEvent) {
+		e.preventDefault();
+		if (mode === 3) {
+			if (board[row_idx][col_idx] === 2) {
+				board[row_idx][col_idx] = 0;
+			} else {
+				board[row_idx][col_idx] = 2;
+			}
+		}
+	}
+
 	function handleKeyUpBody(e: KeyboardEvent) {
 		if (e.key === '1') {
 			mode = 1;
@@ -106,6 +117,7 @@
 					style:--bwv={(row_idx + 1) % 5 === 0 ? '2px' : '1px'}
 					style:--bwh={(col_idx + 1) % 5 === 0 ? '2px' : '1px'}
 					onclick={handleClick.bind(null, row_idx, col_idx)}
+					oncontextmenu={handleRightClick.bind(null, row_idx, col_idx)}
 				>
 					{#if cell === 2 && !hideX}
 						<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
