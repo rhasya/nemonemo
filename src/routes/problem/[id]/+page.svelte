@@ -1,139 +1,157 @@
 <script lang="ts">
-	import Board from '../Board.svelte';
-	import { encodeJson, decodeJsonStr } from '$lib/jsonUtil';
-	import { onMount } from 'svelte';
+	const { data } = $props();
+	const id = $derived(data.id);
 
-	let inputHeight = 15;
-	let inputWidth = 15;
-	let showTextArea = false;
-	let textAreaMsg = '';
-	let showXMark = true;
-	let encodedProblem = '';
-	let game: Game = {
-		height: 0,
-		width: 0,
-		state: [[]]
-	};
+	const modeStr = ['Clear', 'Fill', 'X', 'Toggle'];
 
-	onMount(() => {
-		handleApplyClick();
-	});
+	let mode: 0 | 1 | 2 | 3 = $state(3);
+	let board = $state([...Array(20).keys()].map(() => Array(20).fill(0)));
 
-	function initBoard() {
-		const state: number[][] = [];
-		for (let i = 0; i < game.height; i++) {
-			state.push([]);
-			for (let j = 0; j < game.width; j++) {
-				state[i].push(0);
+	function handleClick(row_idx: number, col_idx: number) {
+		if (mode === 3) {
+			if (board[row_idx][col_idx] === 1) {
+				board[row_idx][col_idx] = 0;
+			} else {
+				board[row_idx][col_idx] = 1;
 			}
-		}
-		game.state = [...state];
-	}
-
-	function processData(data: {
-		width: number;
-		height: number;
-		verProbSize?: number;
-		verProb?: number[][];
-		horProbSize?: number;
-		horProb?: number[][];
-	}) {
-		if (data.verProbSize && data.verProb) {
-			for (let i = 0; i < data.height; i++) {
-				const appArr = Array(data.verProbSize - data.verProb[i].length).map((_) => 0);
-				data.verProb[i].splice(0, 0, ...appArr);
-			}
-		}
-
-		if (data.horProbSize && data.horProb) {
-			for (let i = 0; i < data.width; i++) {
-				const appArr = Array(data.horProbSize - data.horProb[i].length).map((_) => 0);
-				data.horProb[i].splice(0, 0, ...appArr);
-			}
+		} else {
+			board[row_idx][col_idx] = mode;
 		}
 	}
 
-	function handleApplyClick() {
-		game = {
-			height: inputHeight,
-			width: inputWidth,
-			state: [[]]
+	function handleClickMode() {
+		if (mode === 0) {
+			mode = 1;
+		} else if (mode === 1) {
+			mode = 2;
+		} else if (mode === 2) {
+			mode = 3;
+		} else {
+			mode = 0;
+		}
+	}
+
+	$effect(() => {
+		const saveId = `board-${id}`;
+		const saved = localStorage.getItem(saveId);
+		if (saved) {
+			board = JSON.parse(saved);
+		}
+
+		return () => {
+			localStorage.setItem(saveId, JSON.stringify(board));
 		};
-
-		initBoard();
-	}
-
-	function handleSaveClick() {
-		textAreaMsg = encodeJson(game);
-		localStorage.setItem('saveString', textAreaMsg);
-	}
-
-	function handleLoadClick() {
-		let saveString = localStorage.getItem('saveString');
-		if (saveString) {
-			game = { ...decodeJsonStr(saveString) };
-		}
-	}
-
-	async function handleProb1Click() {
-		const { default: data } = await import(`$lib/prob/Prob8.json`);
-		processData(data);
-		game = { state: [[]], ...data };
-		inputWidth = data.width;
-		inputHeight = data.height;
-		initBoard();
-	}
-
-	function handleDPClick() {
-		const data = decodeJsonStr(encodedProblem);
-		processData(data);
-		game = { state: [[]], ...data };
-		inputWidth = data.width;
-		inputHeight = data.height;
-		initBoard();
-		encodedProblem = '';
-	}
+	});
 </script>
 
-<h1>NEMONEMO</h1>
-<div class="option-row">
-	<h4>SIZE</h4>
-	<input type="number" min={1} max={99} maxlength={2} bind:value={inputHeight} />
-	X
-	<input type="number" min={1} max={99} maxlength={2} bind:value={inputWidth} />
-	<button on:click={handleApplyClick}>Apply</button>
-	<div class="w-2" />
-	<h4>SAVE/LOAD</h4>
-	<button on:click={handleSaveClick}>SAVE</button>
-	<button on:click={handleLoadClick}>LOAD</button>
-	{#if showTextArea}
-		<div class="popup">
-			<textarea bind:value={textAreaMsg} />
-			<button on:click={() => (showTextArea = false)}>OK</button>
-		</div>
-	{/if}
-	<h4>DISPLAY</h4>
-	<button on:click={() => (showXMark = !showXMark)}>{`${showXMark ? 'HIDE' : 'SHOW'} X`}</button>
-</div>
-<div class="option-row">
-	<h4>PROBLEM</h4>
-	<button on:click={handleProb1Click}>P</button>
-	<textarea bind:value={encodedProblem} />
-	<button on:click={handleDPClick}>Decode</button>
-</div>
-<div>
-	<Board bind:game {showXMark} />
+<h1>SAMPLE</h1>
+<div class="grid">
+	<div class="blank">
+		<button onclick={handleClickMode}>MODE: {modeStr[mode]}</button>
+		<a href="/">Back To List</a>
+	</div>
+	<div class="top">
+		{#each data.pHor as p}
+			<div class="top__row">
+				<div class="cell">{p[0]}</div>
+				<div class="cell">{p[1]}</div>
+				<div class="cell">{p[2]}</div>
+			</div>
+		{/each}
+	</div>
+	<div class="left">
+		{#each data.pVer as p}
+			<div class="left__row">
+				<div class="cell">{p[0]}</div>
+				<div class="cell">{p[1]}</div>
+				<div class="cell">{p[2]}</div>
+			</div>
+		{/each}
+	</div>
+	<div class="board">
+		{#each board as row, row_idx}
+			{#each row as cell, col_idx}
+				<button
+					class="cell"
+					style:background-color={cell === 1 ? 'black' : 'transparent'}
+					onclick={handleClick.bind(null, row_idx, col_idx)}
+				>
+					{#if cell === 2}
+						<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+							<path d="M 0 0 L 24 24 M 0 24 L 24 0 Z" stroke="gray" />
+						</svg>
+					{:else}
+						{''}
+					{/if}
+				</button>
+			{/each}
+		{/each}
+	</div>
 </div>
 
 <style>
-	h4 {
-		margin-top: 0;
-		margin-bottom: 0;
+	div.grid {
+		--border-color: gray;
+
+		display: grid;
+
+		grid-template-rows: 200px auto;
+		grid-template-columns: 200px auto;
+
+		div.blank {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+
+			border-bottom: 1px solid var(--border-color);
+			border-right: 1px solid var(--border-color);
+		}
+
+		div.top {
+			display: flex;
+			flex-direction: row;
+			justify-content: flex-start;
+
+			border-bottom: 1px solid var(--border-color);
+
+			.top__row {
+				display: flex;
+				flex-direction: column;
+				justify-content: flex-end;
+			}
+		}
+		div.left {
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start;
+
+			border-right: 1px solid var(--border-color);
+
+			.left__row {
+				display: flex;
+				flex-direction: row;
+				justify-content: flex-end;
+			}
+		}
+		div.board {
+			display: grid;
+			grid-template-rows: repeat(20, 1.5rem);
+			grid-template-columns: repeat(20, 1.5rem);
+		}
 	}
-	.option-row {
+	div.cell {
+		width: 1.5rem;
+		height: 1.5rem;
+
 		display: flex;
-		flex-direction: row;
-		gap: 4px;
-		margin-bottom: 1rem;
+		justify-content: center;
+		align-items: center;
+	}
+	button.cell {
+		padding: 0;
+
+		border: none;
+		border-bottom: 1px solid var(--border-color);
+		border-right: 1px solid var(--border-color);
 	}
 </style>

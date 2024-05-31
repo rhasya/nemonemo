@@ -10,7 +10,7 @@
 	<tbody>
 		<tr>
 			<td class="id">1</td>
-			<td class="title">SAMPLE</td>
+			<td class="title"><a href="/problem/1">SAMPLE</a></td>
 			<td class="size">5x5</td>
 		</tr>
 	</tbody>

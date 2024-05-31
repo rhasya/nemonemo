@@ -21,36 +21,7 @@ body {
   margin: 0 24px;
 }
 
-table {
-  border-collapse: collapse;
-  flex-grow: 0;
-}
-
-table td.box, table th.box {
-  border: 1px solid black;
-  padding: 0;
-}
-
-table td.box.null {
-  border: none;
-}
-
-table td.box.ver-line, table th.box.ver-line {
-  border-left-width: 2px;
-}
-
-table td.box.hor-line, table th.box.hor-line {
-  border-top-width: 2px;
-}
-
-table td.box.fill {
-  background-color: #333333;
-}
-
-table td div, table th div {
-  width: 32px;
-  height: 32px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+a {
+  text-decoration: none;
+  color: inherit;
 }
