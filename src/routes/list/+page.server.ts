@@ -1,14 +1,15 @@
 import { db } from '$lib/server/db';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, orderBy, query } from 'firebase/firestore';
 
 export async function load() {
-	const querySnapshot = await getDocs(collection(db, 'nemonemo'));
+	const q = query(collection(db, 'nemonemo'), orderBy('key', 'desc'));
+	const querySnap = await getDocs(q);
 
 	const list: Problem[] = [];
 
-	querySnapshot.forEach((doc) => {
-		const { title, sizeVer, sizeHor } = doc.data();
-		list.push({ id: doc.id, title, sizeVer, sizeHor });
+	querySnap.forEach((doc) => {
+		const { key, title, sizeVer, sizeHor, difficulty } = doc.data();
+		list.push({ id: doc.id, key, title, sizeVer, sizeHor, difficulty });
 	});
 
 	return { list };

@@ -10,9 +10,11 @@ declare global {
 
 	interface Problem {
 		id: string;
+		key: string;
 		title: string;
 		sizeVer: number;
 		sizeHor: number;
+		difficulty: number;
 	}
 }
 
