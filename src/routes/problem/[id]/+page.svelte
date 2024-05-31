@@ -64,7 +64,7 @@
 
 <svelte:body onkeyup={handleKeyUpBody} />
 
-<h1>SAMPLE</h1>
+<h1>{data.title}</h1>
 <div class="grid">
 	<div class="blank">
 		<button onclick={handleClickMode}>MODE: {modeStr[mode]}</button>
@@ -122,8 +122,10 @@
 		div.blank {
 			display: flex;
 			flex-direction: column;
+			justify-content: flex-end;
 			align-items: center;
 			gap: 4px;
+			padding-bottom: 2rem;
 
 			border-bottom: 1px solid var(--border-color);
 			border-right: 1px solid var(--border-color);

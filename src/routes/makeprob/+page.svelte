@@ -1,104 +1,132 @@
 <script lang="ts">
-	import { encodeJson } from '$lib/jsonUtil';
+	import SnowSeparator from '$lib/component/SnowSeparator.svelte';
 
-	let width = 20;
-	let height = 20;
-	let horProbArr = Array<string>(20);
-	let verProbArr = Array<string>(20);
-	let text = '';
-	let encodedText = '';
+	let sizeVerInput = $state(20);
+	let sizeHorInput = $state(20);
 
-	function handleApplyClick() {
-		horProbArr = Array<string>(width);
-		verProbArr = Array<string>(height);
+	let sizeVer = $state(0);
+	let sizeHor = $state(0);
+
+	let dataVer: string[] = $state([]);
+	let dataHor: string[] = $state([]);
+
+	let pVer = $state('');
+	let pHor = $state('');
+
+	function handleClickApply() {
+		sizeVer = sizeVerInput;
+		sizeHor = sizeHorInput;
+
+		dataVer = [...Array(sizeVer).fill('')];
+		dataHor = [...Array(sizeHor).fill('')];
 	}
-	function handleMakeClick() {
-		const horProb = horProbArr.map((line) => line.split(',').map((v) => parseInt(v)));
-		const verProb = verProbArr.map((line) => line.split(',').map((v) => parseInt(v)));
 
-		const horProbSize = horProb.reduce((prev, cur) => (prev >= cur.length ? prev : cur.length), 0);
-		const verProbSize = verProb.reduce((prev, cur) => (prev >= cur.length ? prev : cur.length), 0);
-
-		const j = {
-			width,
-			height,
-			horProbSize,
-			horProb,
-			verProbSize,
-			verProb
-		};
-		text = JSON.stringify(j);
-		encodedText = encodeJson(j);
+	function handleClickCreate() {
+		pVer = JSON.stringify(dataVer.map((str) => str.split(',').map((v) => parseInt(v))));
+		pHor = JSON.stringify(dataHor.map((str) => str.split(',').map((v) => parseInt(v))));
 	}
 </script>
 
 <h1>Make Problem</h1>
-<div>
-	<h2>Size</h2>
+<div class="size-wrap">
+	<label>
+		세로크기(↕)
+		<input type="number" value={sizeVerInput} />
+	</label>
 	<div>
-		<label for="width">Width</label>
-		<input type="number" bind:value={width} id="width" maxlength={2} min={1} max={99} />
-		<span>x</span>
-		<label for="height">Height</label>
-		<input type="number" bind:value={height} id="height" maxlength={2} min={1} max={99} />
-		<button on:click={handleApplyClick}>Apply</button>
+		<button onclick={() => (sizeVerInput += 5)}>+5</button>
+		<button onclick={() => (sizeVerInput -= 5)}>-5</button>
 	</div>
-	<div class="container">
-		<div class="hor">
-			<h2>Horizontal Problem (Left to Right)</h2>
-			<div class="prob-container">
-				{#each horProbArr as _, i (i)}
-					<div class="prob-line">
-						<label for="">{i + 1}</label>
-						<input placeholder="" bind:value={horProbArr[i]} />
-					</div>
-				{/each}
-			</div>
-		</div>
-		<div class="ver">
-			<h2>Vertical Problem (Top to Buttom)</h2>
-			<div>
-				{#each verProbArr as _, i (i)}
-					<div class="prob-line">
-						<label for="">{i + 1}</label>
-						<input placeholder="" bind:value={verProbArr[i]} />
-					</div>
-				{/each}
-			</div>
-		</div>
-	</div>
+	<label>
+		가로크기(↔)
+		<input type="number" value={sizeHorInput} />
+	</label>
 	<div>
-		<button on:click={handleMakeClick}>Make</button>
+		<button onclick={() => (sizeHorInput += 5)}>+5</button>
+		<button onclick={() => (sizeHorInput -= 5)}>-5</button>
 	</div>
+	<button onclick={handleClickApply}>적용</button>
+</div>
+
+<div class="input">
+	<div class="ver">
+		<h2>문제 (↓)</h2>
+		{#each Array(sizeVer).keys() as key}
+			<label>
+				{key + 1}
+				<input type="text" bind:value={dataVer[key]} />
+			</label>
+			{#if (key + 1) % 5 === 0}
+				<SnowSeparator />
+			{/if}
+		{/each}
+	</div>
+	<div class="hor">
+		<h2>문제 (→)</h2>
+		{#each Array(sizeHor).keys() as key}
+			<label>
+				{key + 1}
+				<input type="text" bind:value={dataHor[key]} />
+			</label>
+			{#if (key + 1) % 5 === 0}
+				<SnowSeparator />
+			{/if}
+		{/each}
+	</div>
+</div>
+<div class="result">
 	<div>
-		<textarea bind:value={text} />
-		<textarea bind:value={encodedText} />
+		<button onclick={handleClickCreate}>생성</button>
 	</div>
+	<label>
+		pVer
+		<input type="text" value={pVer} readonly />
+	</label>
+	<label>
+		pHor
+		<input type="text" value={pHor} readonly />
+	</label>
 </div>
 
 <style>
-	.container {
+	div.size-wrap {
+		width: 100%;
+
+		border: 1px solid gray;
+		border-radius: 4px;
+
+		padding: 1rem;
+
 		display: flex;
 		flex-direction: row;
+		align-items: center;
+		gap: 1rem;
+
+		input[type='number'] {
+			width: 100px;
+		}
 	}
-	.hor {
-		flex-grow: 1;
+	div.input {
+		display: flex;
+		gap: 1rem;
+
+		div.ver,
+		div.hor {
+			display: flex;
+			flex-direction: column;
+			gap: 4px;
+
+			flex-basis: 280px;
+
+			label {
+				text-align: right;
+				padding: 0 1rem;
+			}
+		}
 	}
-	.ver {
-		flex-grow: 1;
-	}
-	.prob-container {
+	div.result {
 		display: flex;
 		flex-direction: column;
-	}
-	.prob-line {
-		display: flex;
-		flex-direction: row;
-		justify-content: flex-start;
 		gap: 4px;
-	}
-	.prob-line label {
-		width: 24px;
-		text-align: right;
 	}
 </style>

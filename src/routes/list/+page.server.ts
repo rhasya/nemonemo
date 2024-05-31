@@ -1,5 +1,15 @@
+import { db } from '$lib/server/db';
+import { collection, getDocs } from 'firebase/firestore';
+
 export async function load() {
-	return {
-		list: [{ id: 1, title: '스트라이크', sizeVer: 15, sizeHor: 15 }]
-	};
+	const querySnapshot = await getDocs(collection(db, 'nemonemo'));
+
+	const list: Problem[] = [];
+
+	querySnapshot.forEach((doc) => {
+		const { title, sizeVer, sizeHor } = doc.data();
+		list.push({ id: doc.id, title, sizeVer, sizeHor });
+	});
+
+	return { list };
 }

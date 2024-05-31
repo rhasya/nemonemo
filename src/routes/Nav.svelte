@@ -2,7 +2,7 @@
 	<h1><a href="/">NEMONEMO</a></h1>
 	<ul>
 		<li><a href="/list">List</a></li>
-		<li><a href="/showroom">Showroom</a></li>
+		<li><a href="/makeprob">Make Problem</a></li>
 	</ul>
 </aside>
 

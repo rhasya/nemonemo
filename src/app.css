@@ -12,8 +12,9 @@ body {
 }
 
 :root {
-  font-family: Inter, sans-serif;
+  font-family: Inter, 'Noto Sans KR', sans-serif;
   font-size: 16px;
+  line-height: 1.5;
 }
 
 .main { 
@@ -24,4 +25,8 @@ body {
 a {
   text-decoration: none;
   color: inherit;
+}
+
+input[type="text"], input[type="number"], button {
+  font-size: 1rem;
 }
