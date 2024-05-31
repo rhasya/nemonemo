@@ -3,9 +3,10 @@
 	const id = $derived(data.id);
 
 	const modeStr = ['Clear', 'Fill', 'X', 'Toggle'];
+	const initData = [...Array(data.sizeVer).keys()].map(() => Array(data.sizeHor).fill(0));
 
 	let mode: 0 | 1 | 2 | 3 = $state(3);
-	let board = $state([...Array(20).keys()].map(() => Array(20).fill(0)));
+	let board = $state([...initData]);
 
 	function handleClick(row_idx: number, col_idx: number) {
 		if (mode === 3) {
@@ -16,6 +17,18 @@
 			}
 		} else {
 			board[row_idx][col_idx] = mode;
+		}
+	}
+
+	function handleKeyUpBody(e: KeyboardEvent) {
+		if (e.key === '1') {
+			mode = 1;
+		} else if (e.key === '2') {
+			mode = 2;
+		} else if (e.key === '3') {
+			mode = 3;
+		} else if (e.key === '0') {
+			mode = 0;
 		}
 	}
 
@@ -31,6 +44,11 @@
 		}
 	}
 
+	function handleClickInit() {
+		localStorage.removeItem(`board-${id}`);
+		board = [...initData];
+	}
+
 	$effect(() => {
 		const saveId = `board-${id}`;
 		const saved = localStorage.getItem(saveId);
@@ -44,31 +62,34 @@
 	});
 </script>
 
+<svelte:body onkeyup={handleKeyUpBody} />
+
 <h1>SAMPLE</h1>
 <div class="grid">
 	<div class="blank">
 		<button onclick={handleClickMode}>MODE: {modeStr[mode]}</button>
-		<a href="/">Back To List</a>
+		<button onclick={handleClickInit}>Initialize</button>
+		<a href="/list">Back To List</a>
 	</div>
 	<div class="top">
-		{#each data.pHor as p}
+		{#each data.pHor as row}
 			<div class="top__row">
-				<div class="cell">{p[0]}</div>
-				<div class="cell">{p[1]}</div>
-				<div class="cell">{p[2]}</div>
+				{#each row as value}
+					<div class="cell">{value}</div>
+				{/each}
 			</div>
 		{/each}
 	</div>
 	<div class="left">
-		{#each data.pVer as p}
+		{#each data.pVer as row}
 			<div class="left__row">
-				<div class="cell">{p[0]}</div>
-				<div class="cell">{p[1]}</div>
-				<div class="cell">{p[2]}</div>
+				{#each row as value}
+					<div class="cell">{value}</div>
+				{/each}
 			</div>
 		{/each}
 	</div>
-	<div class="board">
+	<div class="board" style:--r={data.sizeVer} style:--c={data.sizeHor}>
 		{#each board as row, row_idx}
 			{#each row as cell, col_idx}
 				<button
@@ -102,6 +123,7 @@
 			display: flex;
 			flex-direction: column;
 			align-items: center;
+			gap: 4px;
 
 			border-bottom: 1px solid var(--border-color);
 			border-right: 1px solid var(--border-color);
@@ -135,8 +157,8 @@
 		}
 		div.board {
 			display: grid;
-			grid-template-rows: repeat(20, 1.5rem);
-			grid-template-columns: repeat(20, 1.5rem);
+			grid-template-rows: repeat(var(--r), 1.5rem);
+			grid-template-columns: repeat(var(--c), 1.5rem);
 		}
 	}
 	div.cell {
@@ -149,6 +171,7 @@
 	}
 	button.cell {
 		padding: 0;
+		outline: none;
 
 		border: none;
 		border-bottom: 1px solid var(--border-color);

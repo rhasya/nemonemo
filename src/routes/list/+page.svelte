@@ -1,3 +1,7 @@
+<script lang="ts">
+	const { data } = $props();
+</script>
+
 <h1>List</h1>
 <table>
 	<thead>
@@ -8,11 +12,13 @@
 		</tr>
 	</thead>
 	<tbody>
-		<tr>
-			<td class="id">1</td>
-			<td class="title"><a href="/problem/1">SAMPLE</a></td>
-			<td class="size">5x5</td>
-		</tr>
+		{#each data?.list as prob (prob.id)}
+			<tr>
+				<td class="id">{prob.id}</td>
+				<td class="title"><a href="/problem/{prob.id}">{prob.title}</a></td>
+				<td class="size">{prob.sizeVer}x{prob.sizeHor}</td>
+			</tr>
+		{/each}
 	</tbody>
 </table>
 
