@@ -132,6 +132,7 @@
 			{#each row as cell, col_idx}
 				<NemoButton
 					variant={cell}
+					{hideX}
 					verEnd={!((row_idx + 1) % 5)}
 					horEnd={!((col_idx + 1) % 5)}
 					onmousedown={handleMouseDown.bind(null, row_idx, col_idx)}

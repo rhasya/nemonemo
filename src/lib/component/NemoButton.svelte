@@ -3,16 +3,17 @@
 
 	interface NemoButtonProps extends Omit<HTMLButtonAttributes, 'oncontentmenu'> {
 		variant: number;
+		hideX: boolean;
 		horEnd?: boolean;
 		verEnd?: boolean;
 	}
 
-	const { variant = 0, horEnd = false, verEnd = false, ...rest }: NemoButtonProps = $props();
+	const { variant = 0, hideX, horEnd = false, verEnd = false, ...rest }: NemoButtonProps = $props();
 
 	function getBackground() {
 		if (variant === 1) {
 			return 'rgb(0 0 0)';
-		} else if (variant !== 2) {
+		} else if (variant !== 2 || hideX) {
 			return 'transparent';
 		}
 	}

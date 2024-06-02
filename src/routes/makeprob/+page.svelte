@@ -79,12 +79,12 @@
 		<button onclick={handleClickCreate}>생성</button>
 	</div>
 	<label>
-		pVer
-		<input type="text" value={pVer} readonly />
+		<span>pHor</span>
+		<input type="text" value={pHor} readonly />
 	</label>
 	<label>
-		pHor
-		<input type="text" value={pHor} readonly />
+		<span>pVer</span>
+		<input type="text" value={pVer} readonly />
 	</label>
 </div>
 
@@ -93,7 +93,6 @@
 		width: 100%;
 
 		border: 1px solid gray;
-		border-radius: 4px;
 
 		padding: 1rem;
 
@@ -128,5 +127,16 @@
 		display: flex;
 		flex-direction: column;
 		gap: 4px;
+
+		label {
+			span {
+				display: inline-block;
+				width: 3rem;
+				text-align: right;
+			}
+			input {
+				width: 30rem;
+			}
+		}
 	}
 </style>
