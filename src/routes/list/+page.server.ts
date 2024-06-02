@@ -1,3 +1,5 @@
+export const prerender = false;
+
 import { db } from '$lib/server/db';
 import { collection, getDocs, orderBy, query } from 'firebase/firestore';
 
