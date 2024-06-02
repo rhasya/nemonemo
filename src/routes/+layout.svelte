@@ -10,6 +10,6 @@
 </svelte:head>
 
 <Nav />
-<main class="main">
+<main class="main" oncontextmenu={(e) => e.preventDefault()}>
 	{@render children()}
 </main>
