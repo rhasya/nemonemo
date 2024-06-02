@@ -1,3 +1,5 @@
+export const prerender = false;
+
 import { db } from '$lib/server/db.js';
 import { error } from '@sveltejs/kit';
 import { doc, getDoc } from 'firebase/firestore';
