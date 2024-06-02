@@ -1,5 +1,5 @@
 <script lang="ts">
-	import SnowSeparator from '$lib/component/SnowSeparator.svelte';
+	import Separator from '$lib/component/Separator.svelte';
 
 	let sizeVerInput = $state(20);
 	let sizeHorInput = $state(20);
@@ -57,7 +57,7 @@
 				<input type="text" bind:value={dataVer[key]} />
 			</label>
 			{#if (key + 1) % 5 === 0}
-				<SnowSeparator />
+				<Separator />
 			{/if}
 		{/each}
 	</div>
@@ -69,7 +69,7 @@
 				<input type="text" bind:value={dataHor[key]} />
 			</label>
 			{#if (key + 1) % 5 === 0}
-				<SnowSeparator />
+				<Separator />
 			{/if}
 		{/each}
 	</div>

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import NemoButton from '$lib/component/NemoButton.svelte';
+
 	const { data } = $props();
 	const id = $derived(data.id);
 
@@ -9,24 +11,53 @@
 	let board = $state([...initData]);
 	let hideX = $state(false);
 
-	function handleClick(row_idx: number, col_idx: number) {
+	$effect(() => {
+		const saveId = `board-${id}`;
+		const saved = localStorage.getItem(saveId);
+		if (saved) {
+			board = JSON.parse(saved);
+		}
+
+		return () => {
+			localStorage.setItem(saveId, JSON.stringify(board));
+		};
+	});
+
+	// ----------- EVENT HANDLER ---------------
+
+	function handleMouseDown(row_idx: number, col_idx: number, e: MouseEvent) {
+		e.preventDefault();
+		if (e.buttons <= 0) return;
+
 		if (mode === 3) {
-			if (board[row_idx][col_idx] === 1) {
-				board[row_idx][col_idx] = 0;
-			} else {
-				board[row_idx][col_idx] = 1;
+			if (e.button === 0) {
+				// LEFT
+				if (board[row_idx][col_idx] === 1) {
+					board[row_idx][col_idx] = 0;
+				} else {
+					board[row_idx][col_idx] = 1;
+				}
+			} else if (e.button === 2) {
+				// RIGHT
+				if (board[row_idx][col_idx] === 2) {
+					board[row_idx][col_idx] = 0;
+				} else {
+					board[row_idx][col_idx] = 2;
+				}
 			}
 		} else {
 			board[row_idx][col_idx] = mode;
 		}
 	}
 
-	function handleRightClick(row_idx: number, col_idx: number, e: MouseEvent) {
-		e.preventDefault();
+	function handleMouseEnter(row_idx: number, col_idx: number, e: MouseEvent) {
+		if (e.buttons <= 0) return;
+
 		if (mode === 3) {
-			if (board[row_idx][col_idx] === 2) {
-				board[row_idx][col_idx] = 0;
-			} else {
+			// console.log('MouseEnter ', e);
+			if (e.buttons === 1) {
+				board[row_idx][col_idx] = 1;
+			} else if (e.buttons === 2) {
 				board[row_idx][col_idx] = 2;
 			}
 		}
@@ -64,18 +95,6 @@
 	function handleClickHideX() {
 		hideX = !hideX;
 	}
-
-	$effect(() => {
-		const saveId = `board-${id}`;
-		const saved = localStorage.getItem(saveId);
-		if (saved) {
-			board = JSON.parse(saved);
-		}
-
-		return () => {
-			localStorage.setItem(saveId, JSON.stringify(board));
-		};
-	});
 </script>
 
 <svelte:body onkeyup={handleKeyUpBody} />
@@ -111,22 +130,13 @@
 	<div class="board" style:--r={data.sizeVer} style:--c={data.sizeHor}>
 		{#each board as row, row_idx}
 			{#each row as cell, col_idx}
-				<button
-					class="cell"
-					style:background-color={cell === 1 ? 'black' : 'transparent'}
-					style:--bwv={(row_idx + 1) % 5 === 0 ? '2px' : '1px'}
-					style:--bwh={(col_idx + 1) % 5 === 0 ? '2px' : '1px'}
-					onclick={handleClick.bind(null, row_idx, col_idx)}
-					oncontextmenu={handleRightClick.bind(null, row_idx, col_idx)}
-				>
-					{#if cell === 2 && !hideX}
-						<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
-							<path d="M 0 0 L 24 24 M 0 24 L 24 0 Z" stroke="gray" />
-						</svg>
-					{:else}
-						{''}
-					{/if}
-				</button>
+				<NemoButton
+					variant={cell}
+					verEnd={!((row_idx + 1) % 5)}
+					horEnd={!((col_idx + 1) % 5)}
+					onmousedown={handleMouseDown.bind(null, row_idx, col_idx)}
+					onmouseenter={handleMouseEnter.bind(null, row_idx, col_idx)}
+				/>
 			{/each}
 		{/each}
 	</div>
@@ -166,6 +176,7 @@
 				justify-content: flex-end;
 			}
 		}
+
 		div.left {
 			display: flex;
 			flex-direction: column;
@@ -179,12 +190,14 @@
 				justify-content: flex-end;
 			}
 		}
+
 		div.board {
 			display: grid;
 			grid-template-rows: repeat(var(--r), 1.5rem);
 			grid-template-columns: repeat(var(--c), 1.5rem);
 		}
 	}
+
 	div.cell {
 		width: 1.5rem;
 		height: 1.5rem;
@@ -207,14 +220,5 @@
 		div.cell:first-child {
 			border-left: 1px solid var(--border-color);
 		}
-	}
-
-	button.cell {
-		padding: 0;
-		outline: none;
-
-		border: none;
-		border-bottom: var(--bwv) solid var(--border-color);
-		border-right: var(--bwh) solid var(--border-color);
 	}
 </style>
