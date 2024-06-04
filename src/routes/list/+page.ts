@@ -13,8 +13,12 @@ export async function load() {
 	const user = (await getAuthUser()) as User;
 	let admin = false;
 	if (user) {
-		const queryUser = await getDoc(doc(db, 'users', user.uid));
-		admin = queryUser.data()?.admin ?? false;
+		try {
+			const queryUser = await getDoc(doc(db, 'users', user.uid));
+			admin = queryUser?.data()?.admin ?? false;
+		} catch (e) {
+			admin = false;
+		}
 	}
 
 	if (admin) {
