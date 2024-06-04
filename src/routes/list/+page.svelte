@@ -13,7 +13,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		{#each data?.list as prob (prob.id)}
+		{#each data.list as prob (prob.id)}
 			<tr>
 				<td class="key">{prob.key}</td>
 				<td class="title"><a href="/problem/{prob.id}">{prob.title}</a></td>

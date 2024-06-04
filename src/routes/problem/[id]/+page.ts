@@ -1,6 +1,8 @@
-import { db } from '$lib/server/db.js';
-import { error } from '@sveltejs/kit';
+export const ssr = false;
+
 import { doc, getDoc } from 'firebase/firestore';
+import { db } from '$lib/fb.js';
+import { error } from '@sveltejs/kit';
 
 function fillArr(arr: number[][]) {
 	const maxLength = arr.reduce((prev: number, cur: number[]) => {
