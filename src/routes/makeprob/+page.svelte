@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
+	import { goto } from '$app/navigation';
+	import service from '$lib/service';
 	import Separator from '$lib/component/Separator.svelte';
 
 	let sizeVerInput = $state(20);
@@ -10,9 +13,6 @@
 	let dataVer: string[] = $state([]);
 	let dataHor: string[] = $state([]);
 
-	let pVer = $state('');
-	let pHor = $state('');
-
 	function handleClickApply() {
 		sizeVer = sizeVerInput;
 		sizeHor = sizeHorInput;
@@ -21,72 +21,91 @@
 		dataHor = [...Array(sizeHor).fill('')];
 	}
 
-	function handleClickCreate() {
-		pVer = JSON.stringify(dataVer.map((str) => str.split(',').map((v) => parseInt(v))));
-		pHor = JSON.stringify(dataHor.map((str) => str.split(',').map((v) => parseInt(v))));
+	function handleSubmit({ formData, cancel }: { formData: FormData; cancel: () => void }) {
+		const d = Object.fromEntries(formData);
+		const inputData = {
+			...d,
+			pVer: JSON.stringify(dataVer.map((str) => str.split(',').map((v) => parseInt(v)))),
+			pHor: JSON.stringify(dataHor.map((str) => str.split(',').map((v) => parseInt(v)))),
+			sizeVer: parseInt(d.sizeVer as string),
+			sizeHor: parseInt(d.sizeHor as string),
+			difficulty: parseFloat(d.difficulty as string)
+		};
+
+		service.saveProblem(inputData as unknown as Problem).then(() => goto('/list'));
+		cancel();
 	}
 </script>
 
 <h1>Make Problem</h1>
-<div class="size-wrap">
-	<label>
-		세로크기(↕)
-		<input type="number" value={sizeVerInput} />
-	</label>
-	<div>
-		<button onclick={() => (sizeVerInput += 5)}>+5</button>
-		<button onclick={() => (sizeVerInput -= 5)}>-5</button>
+<form use:enhance={handleSubmit} method="post">
+	<div class="size-wrap">
+		<label>
+			Vertical Size(↕)
+			<input type="number" bind:value={sizeVerInput} max={100} required name="sizeVer" />
+		</label>
+		<div>
+			<button onclick={() => (sizeVerInput += 5)}>+5</button>
+			<button onclick={() => (sizeVerInput -= 5)}>-5</button>
+		</div>
+		<label>
+			Horizontal Size(↔)
+			<input type="number" bind:value={sizeHorInput} max={100} required name="sizeHor" />
+		</label>
+		<div>
+			<button onclick={() => (sizeHorInput += 5)}>+5</button>
+			<button onclick={() => (sizeHorInput -= 5)}>-5</button>
+		</div>
+		<button type="button" onclick={handleClickApply}>적용</button>
 	</div>
-	<label>
-		가로크기(↔)
-		<input type="number" value={sizeHorInput} />
-	</label>
-	<div>
-		<button onclick={() => (sizeHorInput += 5)}>+5</button>
-		<button onclick={() => (sizeHorInput -= 5)}>-5</button>
-	</div>
-	<button onclick={handleClickApply}>적용</button>
-</div>
 
-<div class="input">
-	<div class="ver">
-		<h2>문제 (↓)</h2>
-		{#each Array(sizeVer).keys() as key}
-			<label>
-				{key + 1}
-				<input type="text" bind:value={dataVer[key]} />
-			</label>
-			{#if (key + 1) % 5 === 0}
-				<Separator />
-			{/if}
-		{/each}
+	<div class="basic">
+		<label>
+			Key
+			<input type="text" name="key" size={6} required />
+		</label>
+		<label>
+			Difficulty
+			<input type="text" name="difficulty" size={6} required />
+		</label>
+		<label>
+			Title
+			<input type="text" name="title" size={100} required />
+		</label>
 	</div>
-	<div class="hor">
-		<h2>문제 (→)</h2>
-		{#each Array(sizeHor).keys() as key}
-			<label>
-				{key + 1}
-				<input type="text" bind:value={dataHor[key]} />
-			</label>
-			{#if (key + 1) % 5 === 0}
-				<Separator />
-			{/if}
-		{/each}
+
+	<div class="input">
+		<div class="ver">
+			<h2>문제 (↓)</h2>
+			{#each Array(sizeVer).keys() as key}
+				<label>
+					{key + 1}
+					<input type="text" bind:value={dataVer[key]} />
+				</label>
+				{#if (key + 1) % 5 === 0}
+					<Separator />
+				{/if}
+			{/each}
+		</div>
+		<div class="hor">
+			<h2>문제 (→)</h2>
+			{#each Array(sizeHor).keys() as key}
+				<label>
+					{key + 1}
+					<input type="text" bind:value={dataHor[key]} />
+				</label>
+				{#if (key + 1) % 5 === 0}
+					<Separator />
+				{/if}
+			{/each}
+		</div>
 	</div>
-</div>
-<div class="result">
-	<div>
-		<button onclick={handleClickCreate}>생성</button>
+	<div class="result">
+		<div>
+			<button type="submit">저장</button>
+		</div>
 	</div>
-	<label>
-		<span>pHor</span>
-		<input type="text" value={pHor} readonly />
-	</label>
-	<label>
-		<span>pVer</span>
-		<input type="text" value={pVer} readonly />
-	</label>
-</div>
+</form>
 
 <style>
 	div.size-wrap {
@@ -102,8 +121,17 @@
 		gap: 1rem;
 
 		input[type='number'] {
-			width: 100px;
+			width: 4rem;
 		}
+	}
+	div.basic {
+		margin-top: 1rem;
+		border: 1px solid black;
+		padding: 1rem;
+
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
 	}
 	div.input {
 		display: flex;
@@ -124,19 +152,6 @@
 		}
 	}
 	div.result {
-		display: flex;
-		flex-direction: column;
-		gap: 4px;
-
-		label {
-			span {
-				display: inline-block;
-				width: 3rem;
-				text-align: right;
-			}
-			input {
-				width: 30rem;
-			}
-		}
+		margin-top: 1rem;
 	}
 </style>

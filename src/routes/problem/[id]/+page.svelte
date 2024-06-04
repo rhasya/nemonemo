@@ -209,6 +209,7 @@
 
 		border-bottom: var(--bwv, 1px) solid var(--border-color);
 		border-right: var(--bwh, 1px) solid var(--border-color);
+		font-weight: 500;
 	}
 
 	div.top__row {
