@@ -1,15 +1,19 @@
 <script lang="ts">
 	import NemoButton from '$lib/component/NemoButton.svelte';
+	import NumberCell from '$lib/component/NumberCell.svelte';
 
 	const { data } = $props();
 	const id = $derived(data.id);
 
 	const modeStr = ['Clear', 'Fill', 'X', 'Toggle'];
-	const initData = [...Array(data.sizeVer).keys()].map(() => Array(data.sizeHor).fill(0));
+	const initData: number[][] = [...Array(data.sizeVer).keys()].map(() =>
+		Array(data.sizeHor).fill(0)
+	);
 
 	let mode: 0 | 1 | 2 | 3 = $state(3);
-	let board = $state([...initData]);
+	let board = $state(JSON.parse(JSON.stringify(initData)));
 	let hideX = $state(false);
+	let mouseOverInfo = $state({ r: -1, c: -1 });
 
 	$effect(() => {
 		const saveId = `board-${id}`;
@@ -63,6 +67,10 @@
 		}
 	}
 
+	function handleMouseOver(row_idx: number, col_idx: number) {
+		mouseOverInfo = { r: row_idx, c: col_idx };
+	}
+
 	function handleKeyUpBody(e: KeyboardEvent) {
 		if (e.key === '1') {
 			mode = 1;
@@ -89,7 +97,7 @@
 
 	function handleClickInit() {
 		localStorage.removeItem(`board-${id}`);
-		board = [...initData];
+		board = JSON.parse(JSON.stringify(initData));
 	}
 
 	function handleClickHideX() {
@@ -111,9 +119,7 @@
 		{#each data.pHor as row, idx}
 			<div class="top__row">
 				{#each row as value}
-					<div class="cell" style:--bwh={(idx + 1) % 5 === 0 ? '2px' : '1px'}>
-						{value === 0 ? '' : `${value}`}
-					</div>
+					<NumberCell index={idx} {value} hovered={idx === mouseOverInfo.c} />
 				{/each}
 			</div>
 		{/each}
@@ -122,7 +128,7 @@
 		{#each data.pVer as row, idx}
 			<div class="left__row" style:--bwv={(idx + 1) % 5 === 0 ? '2px' : '1px'}>
 				{#each row as value}
-					<div class="cell">{value === 0 ? '' : `${value}`}</div>
+					<NumberCell index={idx} {value} vertical hovered={idx === mouseOverInfo.r} />
 				{/each}
 			</div>
 		{/each}
@@ -135,8 +141,10 @@
 					{hideX}
 					verEnd={!((row_idx + 1) % 5)}
 					horEnd={!((col_idx + 1) % 5)}
+					hovered={row_idx === mouseOverInfo.r || col_idx === mouseOverInfo.c}
 					onmousedown={handleMouseDown.bind(null, row_idx, col_idx)}
 					onmouseenter={handleMouseEnter.bind(null, row_idx, col_idx)}
+					onmouseover={handleMouseOver.bind(null, row_idx, col_idx)}
 				/>
 			{/each}
 		{/each}
@@ -196,31 +204,6 @@
 			display: grid;
 			grid-template-rows: repeat(var(--r), 1.5rem);
 			grid-template-columns: repeat(var(--c), 1.5rem);
-		}
-	}
-
-	div.cell {
-		width: 1.5rem;
-		height: 1.5rem;
-
-		display: flex;
-		justify-content: center;
-		align-items: center;
-
-		border-bottom: var(--bwv, 1px) solid var(--border-color);
-		border-right: var(--bwh, 1px) solid var(--border-color);
-		font-weight: 500;
-	}
-
-	div.top__row {
-		div.cell:first-child {
-			border-top: 1px solid var(--border-color);
-		}
-	}
-
-	div.left__row {
-		div.cell:first-child {
-			border-left: 1px solid var(--border-color);
 		}
 	}
 </style>

@@ -8,7 +8,10 @@ function fillArr(arr: number[][]) {
 	const maxLength = arr.reduce((prev: number, cur: number[]) => {
 		return Math.max(prev, cur.length);
 	}, 0);
-	const fixed = arr.map((item: number[]) => [...Array(maxLength - item.length).fill(0), ...item]);
+	const fixed: (string | number)[][] = arr.map((item: number[]) => [
+		...Array(maxLength - item.length).fill(''),
+		...item
+	]);
 
 	return fixed;
 }

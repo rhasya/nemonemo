@@ -6,24 +6,42 @@
 		hideX: boolean;
 		horEnd?: boolean;
 		verEnd?: boolean;
+		hovered?: boolean;
 	}
 
-	const { variant = 0, hideX, horEnd = false, verEnd = false, ...rest }: NemoButtonProps = $props();
+	const {
+		variant = 0,
+		hideX,
+		horEnd = false,
+		verEnd = false,
+		hovered = false,
+		...rest
+	}: NemoButtonProps = $props();
 
-	function getBackground() {
-		if (variant === 1) {
-			return 'rgb(0 0 0)';
-		} else if (variant !== 2 || hideX) {
-			return 'transparent';
+	function getBackgroundClass() {
+		const arr: string[] = [];
+
+		if (variant === 0) {
+			arr.push('empty');
+		} else if (variant === 1) {
+			arr.push('fill');
+		} else if (variant === 2) {
+			arr.push('cross');
 		}
+
+		if (hovered) {
+			arr.push('hover');
+		}
+
+		return arr;
 	}
 </script>
 
 <button
 	type="button"
-	style:background={getBackground()}
 	style:--border-bottom-width={verEnd ? '2px' : '1px'}
 	style:--border-right-width={horEnd ? '2px' : '1px'}
+	class={getBackgroundClass().join(' ')}
 	oncontextmenu={(e) => e.preventDefault()}
 	{...rest}
 >
@@ -38,6 +56,22 @@
 		border-bottom: var(--border-bottom-width) solid var(--border-color);
 		border-right: var(--border-right-width) solid var(--border-color);
 
-		background: center url($lib/asset/cross.svg);
+		background-color: transparent;
+
+		&.empty {
+			background-color: rgb(255 255 255);
+		}
+		&.empty.hover {
+			background-color: rgb(var(--bg-hover));
+		}
+		&.fill {
+			background-color: rgb(0 0 0);
+		}
+		&.cross {
+			background-image: url($lib/asset/cross.svg);
+		}
+		&.cross.hover {
+			background-color: rgb(var(--bg-hover));
+		}
 	}
 </style>
