@@ -15,6 +15,7 @@ declare global {
 		sizeVer: number;
 		sizeHor: number;
 		difficulty: number;
+		all?: boolean;
 	}
 }
 
