@@ -26,7 +26,9 @@
 		} else if (variant === 1) {
 			arr.push('fill');
 		} else if (variant === 2) {
-			arr.push('cross');
+			if (!hideX) {
+				arr.push('cross');
+			}
 		}
 
 		if (hovered) {
