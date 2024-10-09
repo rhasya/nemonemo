@@ -16,6 +16,11 @@ export async function createToken(user: { username: string }) {
 }
 
 export async function verifyToken(token: string) {
-	const { payload } = await jwtVerify<{ username: string }>(token, key);
-	return { username: payload.username };
+	try {
+		const { payload } = await jwtVerify<{ username: string }>(token, key);
+		return { username: payload.username };
+	} catch (e) {
+		console.error(e);
+		return null;
+	}
 }

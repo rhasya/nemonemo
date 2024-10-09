@@ -8,6 +8,7 @@
 		{#if username}
 			<li><form method="post" action="?/logout"><button type="submit">Logout</button></form></li>
 			<li><a href="/list">List</a></li>
+			<li><a href="/create">Create</a></li>
 		{:else}
 			<li><a href="/login">Login</a></li>
 		{/if}

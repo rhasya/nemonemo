@@ -9,4 +9,4 @@
 	let { value = $bindable(), ...props }: TextFieldProps = $props();
 </script>
 
-<input class="rounded border px-1 py-1 outline-none" {...props} bind:value />
+<input class="w-full rounded border px-1 py-1 outline-none" {...props} bind:value />
