@@ -7,17 +7,17 @@ declare global {
 			user?: { username: string };
 		}
 		// interface PageData {}
+		// interface PageState {}
 		// interface Platform {}
 	}
 
 	interface Problem {
-		id: string;
-		key: string;
-		title: string;
-		sizeVer: number;
-		sizeHor: number;
-		difficulty: number;
-		all?: boolean;
+		id?: number;
+		code?: string;
+		title?: string;
+		difficulty?: string;
+		width?: number;
+		height?: number;
 	}
 }
 

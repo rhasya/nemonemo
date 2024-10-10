@@ -49,7 +49,7 @@
 			<TextField type="text" name="height" bind:value={height} />
 		</Label>
 		<div>
-			<Button type="button">Create</Button>
+			<Button type="submit">Create</Button>
 		</div>
 	</div>
 	<div class="flex gap-2">
@@ -79,7 +79,7 @@
 				{/each}
 			{/if}
 		</div>
-		<textarea class="resize-none rounded border bg-slate-50" readonly name="arr" value={parsed}
+		<textarea class="resize-none rounded border bg-slate-50" readonly name="value" value={parsed}
 		></textarea>
 	</div>
 </form>

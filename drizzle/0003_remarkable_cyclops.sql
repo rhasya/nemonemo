@@ -1,0 +1,1 @@
+ALTER TABLE "problems" ALTER COLUMN "code" DROP DEFAULT;

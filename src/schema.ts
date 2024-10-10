@@ -1,10 +1,10 @@
-import { integer, pgTable, serial, varchar } from 'drizzle-orm/pg-core';
+import { integer, pgTable, serial, text, varchar } from 'drizzle-orm/pg-core';
 
-export const problem = pgTable('problems', {
+export const problemsTable = pgTable('problems', {
 	id: serial().primaryKey(),
+	code: varchar({ length: 200 }).notNull(),
 	title: varchar({ length: 200 }).notNull(),
-	width: integer(),
-	height: integer(),
-	horizontal: varchar(),
-	vertical: varchar()
+	width: integer().notNull(),
+	height: integer().notNull(),
+	value: text()
 });

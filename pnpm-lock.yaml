@@ -23,6 +23,9 @@ importers:
       pg:
         specifier: ^8.13.0
         version: 8.13.0
+      zod:
+        specifier: ^3.23.8
+        version: 3.23.8
     devDependencies:
       '@eslint/js':
         specifier: ^9.12.0
@@ -39,6 +42,9 @@ importers:
       '@sveltejs/vite-plugin-svelte':
         specifier: ^4.0.0-next.6
         version: 4.0.0-next.7(svelte@5.0.0-next.263)(vite@5.4.8(@types/node@22.7.5))
+      '@types/eslint':
+        specifier: ^9.6.1
+        version: 9.6.1
       autoprefixer:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.4.47)
@@ -75,9 +81,6 @@ importers:
       tailwindcss:
         specifier: ^3.4.13
         version: 3.4.13
-      tslib:
-        specifier: ^2.7.0
-        version: 2.7.0
       typescript:
         specifier: ^5.5.0
         version: 5.6.3
@@ -957,6 +960,9 @@ packages:
 
   '@types/cookie@0.6.0':
     resolution: {integrity: sha512-4Kh9a6B2bQciAhf7FSuMRRkUWecJgJu9nPnx3yzpsfXX/c50REIqpHY4C82bXP90qrLtXtkDxTZosYO3UpOwlA==}
+
+  '@types/eslint@9.6.1':
+    resolution: {integrity: sha512-FXx2pKgId/WyYo2jXw63kk7/+TY7u7AziEJxJAnSFzHlqTAS3Ync6SvgYAN/k4/PQpnnVuzoMuVnByKK2qp0ag==}
 
   '@types/estree@1.0.6':
     resolution: {integrity: sha512-AYnb1nQyY49te+VRAVgmzfcgjYS91mY5P0TKUDCLEM+gNnA+3T6rWITXRLYCpahpqSQbN5cE+gHpnPyXjHWxcw==}
@@ -2245,6 +2251,9 @@ packages:
   zimmerframe@1.1.2:
     resolution: {integrity: sha512-rAbqEGa8ovJy4pyBxZM70hg4pE6gDgaQ0Sl9M3enG3I0d6H4XSAM3GeNGLKnsBpuijUow064sf7ww1nutC5/3w==}
 
+  zod@3.23.8:
+    resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
+
 snapshots:
 
   '@alloc/quick-lru@5.2.0': {}
@@ -3018,6 +3027,11 @@ snapshots:
       - supports-color
 
   '@types/cookie@0.6.0': {}
+
+  '@types/eslint@9.6.1':
+    dependencies:
+      '@types/estree': 1.0.6
+      '@types/json-schema': 7.0.15
 
   '@types/estree@1.0.6': {}
 
@@ -4229,3 +4243,5 @@ snapshots:
   yocto-queue@0.1.0: {}
 
   zimmerframe@1.1.2: {}
+
+  zod@3.23.8: {}

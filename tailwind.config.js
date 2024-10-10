@@ -2,7 +2,7 @@ import { fontFamily } from "tailwindcss/defaultTheme"
 
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ["**/*.svelte"],
+  content: ["src/**/*.svelte"],
   theme: {
     extend: {
       fontFamily: {
