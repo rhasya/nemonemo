@@ -1,68 +1,27 @@
 <script lang="ts">
+	import PageTitle from '$lib/component/PageTitle.svelte';
+
 	const { data } = $props();
 </script>
 
-<h1>List</h1>
-<table>
+<PageTitle>List</PageTitle>
+<table class="w-[500px] table-fixed">
 	<thead>
-		<tr>
-			<th class="key">Key</th>
-			<th class="title">Title</th>
-			<th class="size">Size</th>
-			<th class="difficulty">Difficulty</th>
+		<tr class="border-b">
+			<th class="w-[100px] py-1.5">CODE</th>
+			<th class="py-1.5">TITLE</th>
+			<th class="w-[100px] py-1.5">SIZE</th>
 		</tr>
 	</thead>
 	<tbody>
-		{#each data.list as prob (prob.id)}
-			<tr>
-				<td class="key">{prob.key}</td>
-				<td class="title"><a href="/problem/{prob.id}">{prob.title}</a></td>
-				<td class="size">{prob.sizeVer}x{prob.sizeHor}</td>
-				<td class="difficulty">{prob.difficulty}</td>
+		{#each data.problems as problem (problem.id)}
+			<tr class="border-b hover:bg-slate-50">
+				<td class="px-2 py-1.5 text-center">{problem.code}</td>
+				<td class="px-2 py-1.5">
+					<a href={`/problem/${problem.id}`}>{problem.title}</a>
+				</td>
+				<td class="px-2 py-1.5 text-center">{`${problem.height}x${problem.width}`}</td>
 			</tr>
 		{/each}
 	</tbody>
 </table>
-
-<style>
-	table {
-		width: 100%;
-		border-collapse: collapse;
-
-		tr {
-			border-top: 1px solid gray;
-			border-bottom: 1px solid gray;
-			height: 2rem;
-		}
-
-		th,
-		td {
-			padding: 0 1rem;
-		}
-		th {
-			&.key {
-				width: 100px;
-			}
-			&.size {
-				width: 300px;
-			}
-			&.difficulty {
-				width: 100px;
-			}
-		}
-		td {
-			&.key {
-				width: 100px;
-				text-align: center;
-			}
-			&.size {
-				width: 300px;
-				text-align: center;
-			}
-			&.difficulty {
-				width: 100px;
-				text-align: center;
-			}
-		}
-	}
-</style>

@@ -1,22 +1,49 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-	import { auth } from '$lib/fb';
-	import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-	const provider = new GoogleAuthProvider();
+	import { enhance } from '$app/forms';
+	import PageTitle from '$lib/component/PageTitle.svelte';
+	import TextField from '$lib/component/TextField.svelte';
 
-	function handleClick() {
-		signInWithPopup(auth, provider)
-			.then((result) => {
-				const credential = GoogleAuthProvider.credentialFromResult(result);
-				const token = credential?.accessToken!;
-				console.log('OK');
-				goto('/');
-			})
-			.catch((error) => {
-				console.error(error);
-			});
+	const { form } = $props();
+	let input = $state({ username: '', password: '' });
+
+	$effect(() => {
+		input = { username: form?.username ?? '', password: form?.password ?? '' };
+	});
+
+	function validate(obj: Record<string, unknown>) {
+		if ('username' in obj && !obj.username) return false;
+		if ('password' in obj && !obj.password) return false;
+
+		return true;
 	}
 </script>
 
-<h1>Login</h1>
-<button onclick={handleClick}>Sign in with Google</button>
+<PageTitle>Login</PageTitle>
+<p class="text-sm text-gray-600">Enter your username and password to access your account.</p>
+<form
+	class="contents"
+	method="post"
+	use:enhance={({ formData, cancel }) => {
+		if (!validate(Object.fromEntries(formData))) {
+			cancel();
+		}
+	}}
+>
+	<div class="mt-8 flex max-w-[380px] flex-col gap-2">
+		<label class="flex flex-col">
+			<span class="text-sm font-medium">Username</span>
+			<TextField type="text" placeholder="username" name="username" bind:value={input.username} />
+		</label>
+		<label class="flex flex-col">
+			<span class="text-sm font-medium">Password</span>
+			<TextField type="password" name="password" bind:value={input.password} />
+		</label>
+	</div>
+	<div class="mt-8 max-w-[380px]">
+		<button
+			class="pointer-events-none w-full rounded bg-slate-700 py-1.5 text-sm font-medium text-white hover:bg-slate-600 disabled:bg-slate-700/60"
+			disabled={!input.username || !input.password}>Log in</button
+		>
+	</div>
+</form>
+<p class="mt-4 text-sm text-red-700">{form?.error}</p>
