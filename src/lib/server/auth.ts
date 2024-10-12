@@ -3,8 +3,13 @@ import { env } from '$env/dynamic/private';
 
 const key = new TextEncoder().encode(env.JWK_SECRET);
 
-export async function createToken(user: { username: string }) {
-	return await new SignJWT({ username: user.username })
+interface User {
+	id: number;
+	username: string;
+}
+
+export async function createToken({ id, username }: User) {
+	return await new SignJWT({ id, username })
 		.setProtectedHeader({
 			alg: 'HS256',
 			typ: 'JWT'
@@ -17,8 +22,8 @@ export async function createToken(user: { username: string }) {
 
 export async function verifyToken(token: string) {
 	try {
-		const { payload } = await jwtVerify<{ username: string }>(token, key);
-		return { username: payload.username };
+		const { payload } = await jwtVerify<User>(token, key);
+		return { ...payload };
 	} catch (e) {
 		console.error(e);
 		return null;

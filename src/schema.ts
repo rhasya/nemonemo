@@ -1,4 +1,4 @@
-import { integer, pgTable, serial, text, varchar } from 'drizzle-orm/pg-core';
+import { integer, pgTable, serial, text, varchar, boolean } from 'drizzle-orm/pg-core';
 
 export const problemsTable = pgTable('problems', {
 	id: serial().primaryKey(),
@@ -7,4 +7,11 @@ export const problemsTable = pgTable('problems', {
 	width: integer().notNull(),
 	height: integer().notNull(),
 	value: text()
+});
+
+export const usersTable = pgTable('users', {
+	id: serial().primaryKey(),
+	username: varchar({ length: 200 }).notNull(),
+	password: varchar({ length: 200 }).notNull(),
+	enabled: boolean().default(false).notNull()
 });

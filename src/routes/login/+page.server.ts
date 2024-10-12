@@ -1,5 +1,7 @@
 import { redirect } from '@sveltejs/kit';
+
 import { createToken } from '$lib/server/auth';
+import { getUserWithCredential } from '$lib/server/service/user.js';
 
 export function load({ locals }) {
 	if (locals.user) {
@@ -13,13 +15,14 @@ export const actions = {
 		const username = formData.get('username') as string;
 		const password = formData.get('password') as string;
 
-		// TODO: Get user info from database
-		if (username !== 'admin' && password !== 'admin') {
+		// Get user info from database
+		const user = await getUserWithCredential(username, password);
+		if (!user) {
 			return { error: 'wrong username and password!', username, password };
 		}
 
 		// TODO: Save token at cookie
-		const token = await createToken({ username: 'admin' });
+		const token = await createToken({ id: user.id, username: user.username });
 		cookies.set('token', token, { path: '/', httpOnly: true, secure: false });
 
 		redirect(307, '/');
