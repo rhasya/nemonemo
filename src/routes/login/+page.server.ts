@@ -20,7 +20,7 @@ export const actions = {
 
 		// TODO: Save token at cookie
 		const token = await createToken({ username: 'admin' });
-		cookies.set('token', token, { path: '/', httpOnly: true });
+		cookies.set('token', token, { path: '/', httpOnly: true, secure: false });
 
 		redirect(307, '/');
 	}
