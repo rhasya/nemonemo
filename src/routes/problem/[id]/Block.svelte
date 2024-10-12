@@ -3,14 +3,17 @@
 	import clsx from 'clsx';
 	import { X } from 'lucide-svelte';
 
-	const {
-		fill,
-		children,
-		onmousedown
-	}: { fill?: number; children?: Snippet; onmousedown?: (e: MouseEvent) => void } = $props();
+	interface BlockProps {
+		fill?: number;
+		children?: Snippet;
+		onmousedown?: (e: MouseEvent) => void;
+		onmousemove?: (e: MouseEvent) => void;
+	}
 
-	function handleMouseDown(e: MouseEvent) {
-		onmousedown?.(e);
+	const { fill, children, onmousedown, onmousemove }: BlockProps = $props();
+
+	function handleDragStart(e: MouseEvent) {
+		e.preventDefault();
 	}
 </script>
 
@@ -20,10 +23,12 @@
 		'bg-white': fill === 0,
 		'bg-black': fill === 1
 	})}
-	onmousedown={handleMouseDown}
+	{onmousedown}
+	{onmousemove}
+	ondragstart={handleDragStart}
 >
 	{#if fill === 2}
-		<X class="h-8 w-8" />
+		<X class="h-full w-full" />
 	{:else}
 		{@render children?.()}
 	{/if}
