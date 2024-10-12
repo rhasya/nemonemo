@@ -8,7 +8,7 @@ export function load({ locals }) {
 
 export const actions = {
 	logout: async function ({ locals, cookies }) {
-		cookies.delete('token', { path: '/' });
+		cookies.delete('token', { path: '/', httpOnly: true, secure: false });
 		locals.user = undefined;
 
 		redirect(303, '/login');
