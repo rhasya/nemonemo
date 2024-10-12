@@ -1,5 +1,5 @@
 {
-  "id": "a92affb5-1155-4fb9-b008-4f2b27f1b902",
+  "id": "3da6b173-d29a-49dc-8c72-69dec8b5123c",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -14,6 +14,12 @@
           "primaryKey": true,
           "notNull": true
         },
+        "code": {
+          "name": "code",
+          "type": "varchar(200)",
+          "primaryKey": false,
+          "notNull": true
+        },
         "title": {
           "name": "title",
           "type": "varchar(200)",
@@ -24,23 +30,17 @@
           "name": "width",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "height": {
           "name": "height",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
-        "horizontal": {
-          "name": "horizontal",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "vertical": {
-          "name": "vertical",
-          "type": "varchar",
+        "value": {
+          "name": "value",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         }

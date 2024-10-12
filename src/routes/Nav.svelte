@@ -2,7 +2,7 @@
 	const { username }: { username?: string } = $props();
 </script>
 
-<aside class="flex h-full w-[180px] shrink-0 flex-col gap-4 bg-slate-100 px-4 py-4">
+<aside class="flex h-full w-[180px] shrink-0 flex-col gap-4 border-r px-4 py-4">
 	<h1 class="text-2xl font-bold"><a href="/">NEMONEMO</a></h1>
 	<menu class="flex flex-col gap-2">
 		{#if username}

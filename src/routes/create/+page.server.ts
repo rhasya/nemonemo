@@ -15,6 +15,6 @@ export const actions = {
 		}
 
 		await createProblem(data);
-		redirect(303, '/');
+		redirect(303, '/list');
 	}
 };

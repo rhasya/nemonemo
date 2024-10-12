@@ -1,1 +1,0 @@
-ALTER TABLE "problems" ADD COLUMN "code" varchar(200) DEFAULT 'A' NOT NULL;

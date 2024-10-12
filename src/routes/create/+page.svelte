@@ -9,18 +9,22 @@
 	let width = $state('0');
 	let height = $state('0');
 	let val: { h: string[]; v: string[] } = $state({ h: [], v: [] });
-	let parsed = $derived(
-		JSON.stringify({
-			h: val.h.reduce((prev: string[], cur) => {
-				prev.push(`${cur}`);
-				return prev;
-			}, []),
-			v: val.v.reduce((prev: string[], cur) => {
-				prev.push(`${cur}`);
-				return prev;
-			}, [])
-		})
-	);
+	let parsed = $derived.by(() => {
+		try {
+			return JSON.stringify({
+				h: val.h.reduce((prev: string[], cur) => {
+					prev.push(JSON.parse(`[${cur}]`));
+					return prev;
+				}, []),
+				v: val.v.reduce((prev: string[], cur) => {
+					prev.push(JSON.parse(`[${cur}]`));
+					return prev;
+				}, [])
+			});
+		} catch {
+			return '';
+		}
+	});
 
 	$effect(() => {
 		if (width) untrack(() => (val.h = Array(parseInt(width)).fill('')));
