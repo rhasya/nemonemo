@@ -5,12 +5,13 @@
 
 	interface BlockProps {
 		fill?: number;
+		hide?: boolean;
 		children?: Snippet;
 		onmousedown?: (e: MouseEvent) => void;
 		onmousemove?: (e: MouseEvent) => void;
 	}
 
-	const { fill, children, onmousedown, onmousemove }: BlockProps = $props();
+	const { fill, hide, children, onmousedown, onmousemove }: BlockProps = $props();
 
 	function handleDragStart(e: MouseEvent) {
 		e.preventDefault();
@@ -28,7 +29,9 @@
 	ondragstart={handleDragStart}
 >
 	{#if fill === 2}
-		<X class="h-full w-full" />
+		{#if !hide}
+			<X class="h-full w-full" />
+		{/if}
 	{:else}
 		{@render children?.()}
 	{/if}

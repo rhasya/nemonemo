@@ -13,6 +13,7 @@
 				.fill(0)
 				.map(() => Array(data.problem.width).fill(0))
 	);
+	let hide = $state(false);
 
 	const value: { h: number[][]; v: number[][] } = $derived.by(() => {
 		try {
@@ -55,6 +56,10 @@
 			.map(() => Array(data.problem.width).fill(0));
 	}
 
+	function handleHideClick() {
+		hide = !hide;
+	}
+
 	async function handleSaveClick() {
 		const input = JSON.stringify(board);
 		const res = await fetch('/api/problems', {
@@ -95,6 +100,7 @@
 					<div class={clsx('border border-black', { 'mr-[-1px]': c % 5 !== 4 })}>
 						<Block
 							fill={cell}
+							{hide}
 							onmousedown={handleCellMouseDown.bind(null, r, c)}
 							onmousemove={handleCellMouseMove.bind(null, r, c)}
 						/>
@@ -106,6 +112,7 @@
 </div>
 <div class="mt-4">
 	<Button variant="secondary" onclick={handleInitClick}>초기화</Button>
+	<Button variant="secondary" onclick={handleHideClick}>{!hide ? 'X숨기기' : 'X보이기'}</Button>
 	<Button onclick={handleSaveClick}>저장</Button>
 </div>
 <footer class="h-8"></footer>
