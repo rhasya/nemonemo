@@ -15,6 +15,13 @@
       "when": 1728741022054,
       "tag": "0001_handy_inhumans",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1728780799413,
+      "tag": "0002_massive_trauma",
+      "breakpoints": true
     }
   ]
 }

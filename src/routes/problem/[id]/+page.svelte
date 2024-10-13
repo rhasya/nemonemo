@@ -8,9 +8,10 @@
 
 	const { data } = $props();
 	let board = $state(
-		Array(data.problem.height)
-			.fill(0)
-			.map(() => Array(data.problem.width).fill(0))
+		data.board ??
+			Array(data.problem.height)
+				.fill(0)
+				.map(() => Array(data.problem.width).fill(0))
 	);
 
 	const value: { h: number[][]; v: number[][] } = $derived.by(() => {
@@ -53,11 +54,30 @@
 			.fill(0)
 			.map(() => Array(data.problem.width).fill(0));
 	}
+
+	async function handleSaveClick() {
+		const input = JSON.stringify(board);
+		const res = await fetch('/api/problems', {
+			method: 'post',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				userId: data.userId,
+				problemId: data.problem.id,
+				board: JSON.stringify(board)
+			})
+		});
+
+		if (res.ok) {
+			console.log('ok');
+		}
+	}
 </script>
 
 <PageTitle>{data.problem.title}</PageTitle>
 <div class="mt-8 grid w-fit grid-cols-[auto,auto] grid-rows-[auto,auto]">
-	<div class=""></div>
+	<div></div>
 	<div class="flex">
 		{#each value.h as numbers, i}
 			<HorizontalLine {numbers} size={maxHorizontalSize} index={i} />
@@ -85,6 +105,7 @@
 	</div>
 </div>
 <div class="mt-4">
-	<Button onclick={handleInitClick}>초기화</Button>
+	<Button variant="secondary" onclick={handleInitClick}>초기화</Button>
+	<Button onclick={handleSaveClick}>저장</Button>
 </div>
 <footer class="h-8"></footer>
