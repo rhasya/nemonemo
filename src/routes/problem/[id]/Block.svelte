@@ -6,12 +6,13 @@
 	interface BlockProps {
 		fill?: number;
 		hide?: boolean;
+		hover?: boolean;
 		children?: Snippet;
 		onmousedown?: (e: MouseEvent) => void;
 		onmousemove?: (e: MouseEvent) => void;
 	}
 
-	const { fill, hide, children, onmousedown, onmousemove }: BlockProps = $props();
+	const { fill, hide, hover, children, onmousedown, onmousemove }: BlockProps = $props();
 
 	function handleDragStart(e: MouseEvent) {
 		e.preventDefault();
@@ -20,10 +21,14 @@
 
 <button
 	type="button"
-	class={clsx('flex h-8 w-8 cursor-default items-center justify-center font-medium outline-none', {
-		'bg-white': fill === 0,
-		'bg-black': fill === 1
-	})}
+	class={clsx(
+		'flex h-8 w-8 cursor-default items-center justify-center font-medium outline-none transition-colors',
+		{
+			'bg-white': fill === 0 && !hover,
+			'bg-blue-100': fill === 0 && hover,
+			'bg-black': fill === 1
+		}
+	)}
 	{onmousedown}
 	{onmousemove}
 	ondragstart={handleDragStart}
