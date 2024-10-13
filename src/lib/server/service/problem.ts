@@ -1,9 +1,9 @@
+import { eq } from 'drizzle-orm';
 import type { z } from 'zod';
 
-import { getDb } from '$lib/server/db';
 import type { createProblemDto } from '$lib/server/dto/problemDto';
 import { problemsTable } from '../../../schema';
-import { eq } from 'drizzle-orm';
+import { getDb } from '../db';
 
 export async function createProblem(input: z.infer<typeof createProblemDto>) {
 	const db = await getDb();

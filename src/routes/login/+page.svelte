@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import Button from '$lib/component/Button.svelte';
 	import PageTitle from '$lib/component/PageTitle.svelte';
 	import TextField from '$lib/component/TextField.svelte';
 
@@ -40,10 +41,7 @@
 		</label>
 	</div>
 	<div class="mt-8 max-w-[380px]">
-		<button
-			class="pointer-events-none w-full rounded bg-slate-700 py-1.5 text-sm font-medium text-white hover:bg-slate-600 disabled:bg-slate-700/60"
-			disabled={!input.username || !input.password}>Log in</button
-		>
+		<Button disabled={!input.username || !input.password} size="full">Log in</Button>
 	</div>
 </form>
 <p class="mt-4 text-sm text-red-700">{form?.error}</p>

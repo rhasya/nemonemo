@@ -35,55 +35,57 @@
 </script>
 
 <PageTitle>Create Problem</PageTitle>
-<form class="flex w-full gap-8" method="post" use:enhance>
-	<div class="mt-4 flex w-[380px] flex-col gap-4">
-		<Label text="Code">
-			<TextField type="text" name="code" />
-		</Label>
-		<Label text="Title">
-			<TextField type="text" name="title" />
-		</Label>
-		<Label text="Difficulty">
-			<TextField type="text" name="difficulty" />
-		</Label>
-		<Label text="Width">
-			<TextField type="text" name="width" bind:value={width} />
-		</Label>
-		<Label text="Height">
-			<TextField type="text" name="height" bind:value={height} />
-		</Label>
-		<div>
-			<Button type="submit">Create</Button>
+<form class="flex w-full flex-col gap-8" method="post" use:enhance>
+	<div class="flex w-full">
+		<div class="mt-4 flex w-[380px] flex-col gap-4">
+			<Label text="Code">
+				<TextField type="text" name="code" />
+			</Label>
+			<Label text="Title">
+				<TextField type="text" name="title" />
+			</Label>
+			<Label text="Difficulty">
+				<TextField type="text" name="difficulty" />
+			</Label>
+			<Label text="Width">
+				<TextField type="text" name="width" bind:value={width} />
+			</Label>
+			<Label text="Height">
+				<TextField type="text" name="height" bind:value={height} />
+			</Label>
+		</div>
+		<div class="flex gap-2">
+			<div class="w-[200px] shrink-0 grow">
+				<h2 class="w-full text-xl font-bold">Horizontal(L -> R)</h2>
+				{#if width}
+					{#each Array(parseInt(width))
+						.fill(0)
+						.map((_, id) => id) as id (id)}
+						<div class="flex w-full">
+							<span class="w-[32px]">{id + 1}</span>
+							<TextField type="text" bind:value={val.h[id]} />
+						</div>
+					{/each}
+				{/if}
+			</div>
+			<div class="w-[200px] shrink-0 grow">
+				<h2 class="w-full text-xl font-bold">Vertical(T -> B)</h2>
+				{#if height}
+					{#each Array(parseInt(height))
+						.fill(0)
+						.map((_, id) => id) as id (id)}
+						<div class="flex w-full">
+							<span class="w-[32px]">{id + 1}</span>
+							<TextField type="text" bind:value={val.v[id]} />
+						</div>
+					{/each}
+				{/if}
+			</div>
+			<textarea class="resize-none rounded border bg-slate-50" readonly name="value" value={parsed}
+			></textarea>
 		</div>
 	</div>
-	<div class="flex gap-2">
-		<div class="w-[200px] shrink-0 grow">
-			<h2 class="w-full text-xl font-bold">Horizontal(L -> R)</h2>
-			{#if width}
-				{#each Array(parseInt(width))
-					.fill(0)
-					.map((_, id) => id) as id (id)}
-					<div class="flex w-full">
-						<span class="w-[32px]">{id + 1}</span>
-						<TextField type="text" bind:value={val.h[id]} />
-					</div>
-				{/each}
-			{/if}
-		</div>
-		<div class="w-[200px] shrink-0 grow">
-			<h2 class="w-full text-xl font-bold">Vertical(T -> B)</h2>
-			{#if height}
-				{#each Array(parseInt(height))
-					.fill(0)
-					.map((_, id) => id) as id (id)}
-					<div class="flex w-full">
-						<span class="w-[32px]">{id + 1}</span>
-						<TextField type="text" bind:value={val.v[id]} />
-					</div>
-				{/each}
-			{/if}
-		</div>
-		<textarea class="resize-none rounded border bg-slate-50" readonly name="value" value={parsed}
-		></textarea>
+	<div>
+		<Button type="submit">Create</Button>
 	</div>
 </form>
