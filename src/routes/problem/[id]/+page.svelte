@@ -14,6 +14,7 @@
 				.map(() => Array(data.problem.width).fill(0))
 	);
 	let hide = $state(false);
+	let hover = $state({ r: -1, c: -1 });
 
 	const value: { h: number[][]; v: number[][] } = $derived.by(() => {
 		try {
@@ -48,6 +49,9 @@
 		else if (e.buttons === 2) {
 			if (board[r][c] === 0) board[r][c] = 2;
 		}
+
+		// For hover
+		hover = { r, c };
 	}
 
 	function handleInitClick() {
@@ -61,7 +65,6 @@
 	}
 
 	async function handleSaveClick() {
-		const input = JSON.stringify(board);
 		const res = await fetch('/api/problems', {
 			method: 'post',
 			headers: {
@@ -81,16 +84,16 @@
 </script>
 
 <PageTitle>{data.problem.title}</PageTitle>
-<div class="mt-8 grid w-fit grid-cols-[auto,auto] grid-rows-[auto,auto]">
+<div class="mt-8 grid w-fit grid-cols-[auto_auto] grid-rows-[auto_auto]">
 	<div></div>
 	<div class="flex">
 		{#each value.h as numbers, i}
-			<HorizontalLine {numbers} size={maxHorizontalSize} index={i} />
+			<HorizontalLine {numbers} size={maxHorizontalSize} index={i} hover={i === hover.c} />
 		{/each}
 	</div>
 	<div class="flex flex-col">
 		{#each value.v as numbers, i}
-			<VerticalLine {numbers} size={maxVerticalSize} index={i} />
+			<VerticalLine {numbers} size={maxVerticalSize} index={i} hover={i === hover.r} />
 		{/each}
 	</div>
 	<div class="flex flex-col">
@@ -100,6 +103,7 @@
 					<div class={clsx('border border-black', { 'mr-[-1px]': c % 5 !== 4 })}>
 						<Block
 							fill={cell}
+							hover={r === hover.r || c === hover.c}
 							{hide}
 							onmousedown={handleCellMouseDown.bind(null, r, c)}
 							onmousemove={handleCellMouseMove.bind(null, r, c)}
